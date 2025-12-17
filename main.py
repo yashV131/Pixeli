@@ -86,9 +86,9 @@ def save_grid_as_image(grid, filename= "pixelart.jpg"):
    
     for x in range(GRID_COLS):
         for y in range(GRID_ROWS):
-            if grid[x][y]:
+            if grid[x][y]!=WHITE:
                 rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE-1, CELL_SIZE-1)
-                pygame.draw.rect(surf, (*COLOR,255), rect)
+                pygame.draw.rect(surf, (*grid[x][y],255), rect)
     pygame.image.save(surf,filename)
     print(f"Saved image to {filename}")
  
