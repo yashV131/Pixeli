@@ -1,13 +1,15 @@
 import pygame
+import asyncio
+import tkinter
 
 pygame.init()
 pygame.font.init()
-font = pygame.font.SysFont('Arial', 24)
+font = pygame.font.SysFont(None, 24)
 
 # Screen & grid parameters
 screen_width = 1000
 screen_height = 600
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
 pygame.display.set_caption("Pixel Art Maker")
 
 WHITE = (255, 255, 255)
@@ -42,9 +44,15 @@ def draw():
 
 def event_handler():
     global COLOR
+    global screen
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
+        elif event.type == pygame.VIDEORESIZE:
+            # Update screen dimensions
+            WIDTH, HEIGHT = event.w, event.h
+            screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 mx, my = pygame.mouse.get_pos()
@@ -94,13 +102,16 @@ def save_grid_as_image(grid, filename= "pixelart.jpg"):
  
     
     
-    
-running = True
-while running:
-    screen.fill((0,0,0))
-    draw()
-    pygame.draw.rect(screen, BLUE, (rect_x1, rect_y1, rect_width, rect_height), line_thickness)
-    running = event_handler()
-    pygame.display.flip()
+async def main(): 
+    running = True
+    while running:
+        await asyncio.sleep(0)
+        screen.fill((0,0,0))
+        draw()
+        pygame.draw.rect(screen, BLUE, (rect_x1, rect_y1, rect_width, rect_height), line_thickness)
+        running = event_handler()
+        pygame.display.flip()
 
-pygame.quit()
+    # pygame.quit()
+    
+asyncio.run(main())
